@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+/* ================= CARD ================= */
+.card {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  position: relative;
+  width: 320px;
+  height: 420px;
+}
+
+.teddy {
+  width: 150px;
+  margin-bottom: 15px;
+}
+
+h1 { color: #ff4d6d; margin-bottom: 10px; }
+h2 { margin-bottom: 30px; }
+
+/* ================= BUTTONS ================= */
+button {
+  position: absolute;
+  width: 100px;
+  height: 40px;
+  font-size: 16px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+#yes {
+  bottom: 40px;
+  left: 40px;
+  background: #ff4d6d;
+  color: white;
+}
+
+#no {
+  bottom: 40px;
+  right: 40px;
+  background: #ccc;
+}
+
+/* ================= SCROLL ================= */
+.scroll-container {
+  width: 440px;
+  height: 680px;            /* 🔥 INCREASED */
+  background-image: url("scroll.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  margin-top: 10px;
+
+  transform: scaleY(0);
+  transform-origin: top;
+  animation: unroll 1.3s ease-out forwards;
+}
+
+@keyframes unroll {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+/* INNER TEXT AREA */
+.scroll-inner {
+  position: absolute;
+  top: 17%;          /* 🔥 pushed DOWN */
+  left: 16%;         /* 🔥 pushed IN */
+  width: 68%;
+  height: 70%;       /* 🔥 more space */
+  padding: 18px;     /* 🔥 invisible border */
+  box-sizing: border-box;
+
+  overflow: hidden;
+  text-align: center;
+
+  opacity: 0;
+  animation: fadeInText 1s ease forwards;
+  animation-delay: 1.2s;
+}
+
+@keyframes fadeInText {
+  to { opacity: 1; }
+}
+
+.note {
+  font-family: 'IM Fell English', cursive;
+  font-size: 18px;
+  line-height: 1.6;          /* 🔥 prevents overflow */
+  color: #4a2e0c;
+  word-wrap: break-word;
+}
+
+/* ================= TEDDY ================= */
+.teddy2 {
+  width: 180px;
+  margin-bottom: -10px;
+  display: none;
+  z-index: 2;
+}
+
+/* ================= HEARTS ================= */
+.heart {
+  position: absolute;
+  font-size: 24px;
+  animation: float 2s ease-out forwards;
+}
+
+@keyframes float {
+  from { transform: translateY(0) scale(1); opacity: 1; }
+  to { transform: translateY(-180px) scale(1.4); opacity: 0; }
+}
+
+.emoji-pop {
+  display: inline-block;
+  animation: pop 0.4s ease-out;
+}
+
+@keyframes pop {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- PAGE 1 -->
+<div class="card" id="question-card">
+  <img src="bear.gif" class="teddy">
+  <h1>HEY STRANGER 💖</h1>
+  <h2>Will you be my Valentine? 💖</h2>
+  <button id="yes">Yes 💕</button>
+  <button id="no">No 🙃</button>
+</div>
+
+<!-- PAGE 2 -->
+<img src="kiss.gif" class="teddy2" id="teddy">
+<div class="scroll-container" id="scroll" style="display:none;">
+  <div class="scroll-inner">
+    <div class="note" id="note"></div>
+  </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("no");
+const card = document.querySelector(".card");
+
+// Teleport NO
+function teleportNo() {
+  const maxX = card.clientWidth - noBtn.offsetWidth - 20;
+  const maxY = card.clientHeight - noBtn.offsetHeight - 20;
+
+  noBtn.style.left = Math.random() * maxX + "px";
+  noBtn.style.top = Math.random() * maxY + "px";
+}
+
+noBtn.addEventListener("mouseenter", teleportNo);
+noBtn.addEventListener("touchstart", e => {
+  e.preventDefault();
+  teleportNo();
+});
+
+// YES CLICK
+document.getElementById("yes").addEventListener("click", () => {
+  document.getElementById("question-card").style.display = "none";
+  document.getElementById("teddy").style.display = "block";
+  document.getElementById("scroll").style.display = "block";
+
+  const message =
+  "Hey genius 😎, remember that ‘NO’ button you couldn’t click? Yeah… that was me 😏. spoiler: you failed 💖. Now you’re officially stuck with me 🥰. My hugs are unavoidable, my kisses are mandatory, and my terrible jokes are non-refundable 🤪. Congrats… you’re my Valentine 🍫✨ I LOVE YOU BABY 💖";
+
+  const note = document.getElementById("note");
+  let i = 0;
+
+  function typeText() {
+    if (i < message.length) {
+      note.innerHTML += message[i];
+      i++;
+      setTimeout(typeText, 55);
+    }
+  }
+  typeText();
+
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.textContent = "💖";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.bottom = "0";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 2000);
+  }, 350);
+});
+</script>
+
+</body>
+</html>
